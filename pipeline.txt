@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Code Fetch Stage') {
             steps {
-                git branch: 'main', url: 'https://github.com/imran1509/DevSecOps-Project-Netflix-Deployment.git'
+                git branch: 'main', url: 'https://github.com/popeye605/straming-website.git'
             }
         }
         stage('Install Dependencies') {
