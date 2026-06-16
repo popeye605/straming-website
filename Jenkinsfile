@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = "ansaarnaqvi12/straming-website" // Matches your successful login account
         DOCKER_HUB_CREDS = 'docker'
-        KUBECONFIG_CREDS = 'k8s-creds'
+        KUBECONFIG_CREDS = 'k8s'
         TMDB_API_KEY = credentials('TMDB_API_KEY') // Add this to Jenkins Credentials as Secret Text
     }
 
@@ -33,10 +33,11 @@ pipeline {
         stage('Kubernetes Deployment Stage') {
             steps {
                 script {
-                    // Requires 'Kubernetes CLI' plugin
-                    withKubeConfig([credentialsId: "${KUBECONFIG_CREDS}"]) {
-                        // Update the image in the deployment manifest
-                        sh "sed -i 's|image: .*|image: ${DOCKER_IMAGE}:${env.BUILD_ID}|g' Kubernetes/deployment.yml"
+                    // Using named arguments for withKubeConfig
+                    // Update the image in the deployment manifest before entering KubeConfig block
+                    sh "sed -i 's|image: .*|image: ${DOCKER_IMAGE}:${env.BUILD_ID}|g' Kubernetes/deployment.yml"
+                    
+                    withKubeConfig(credentialsId: KUBECONFIG_CREDS) {
                         sh 'kubectl apply -f Kubernetes/deployment.yml'
                         sh 'kubectl apply -f Kubernetes/service.yml'
                     }
