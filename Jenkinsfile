@@ -33,13 +33,12 @@ pipeline {
         stage('Kubernetes Deployment Stage') {
             steps {
                 script {
-                    // Using named arguments for withKubeConfig
-                    // Update the image in the deployment manifest before entering KubeConfig block
-                    sh "sed -i 's|image: .*|image: ${DOCKER_IMAGE}:${env.BUILD_ID}|g' Kubernetes/deployment.yml"
-                    
-                    withKubeConfig(credentialsId: KUBECONFIG_CREDS) {
-                        sh 'kubectl apply -f Kubernetes/deployment.yml'
-                        sh 'kubectl apply -f Kubernetes/service.yml'
+                    // Bypass the Kubernetes CLI plugin validator by writing kubeconfig manually
+                    withCredentials([file(credentialsId: KUBECONFIG_CREDS, variable: 'KUBECONFIG_FILE')]) {
+                        // Update the image in the deployment manifest
+                        sh "sed -i 's|image: .*|image: ${DOCKER_IMAGE}:${env.BUILD_ID}|g' Kubernetes/deployment.yml"
+                        sh "KUBECONFIG=${KUBECONFIG_FILE} kubectl apply -f Kubernetes/deployment.yml"
+                        sh "KUBECONFIG=${KUBECONFIG_FILE} kubectl apply -f Kubernetes/service.yml"
                     }
                 }
             }
@@ -49,9 +48,9 @@ pipeline {
             steps {
                 echo 'Verifying Deployment Status for Monitoring...'
                 script {
-                    withKubeConfig([credentialsId: "${KUBECONFIG_CREDS}"]) {
-                        sh 'kubectl get pods'
-                        sh 'kubectl get svc'
+                    withCredentials([file(credentialsId: KUBECONFIG_CREDS, variable: 'KUBECONFIG_FILE')]) {
+                        sh "KUBECONFIG=${KUBECONFIG_FILE} kubectl get pods"
+                        sh "KUBECONFIG=${KUBECONFIG_FILE} kubectl get svc"
                     }
                 }
                 echo 'Monitoring metrics should now be reflecting in Grafana dashboard.'
