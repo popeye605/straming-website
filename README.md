@@ -1,7 +1,7 @@
 
 # DevSecOps Project!
 
-![](https://github.com/imran1509/DevSecOps-Project-Netflix-Deployment/blob/main/public/assets/Project_Netflix.png)
+![](https://github.com/popeye605/straming-website/blob/main/public/assets/Project_Netflix.png)
 
 # Deploy a Netflix Clone with a Complete CI/CD Pipeline using jenkins on a cloud in a DevSecOps Environment
 
@@ -46,7 +46,7 @@ In this project we deploy a Netflix clone application using a secure CI/CD pipel
 - Clone your application's code repository onto the EC2 instance:
     
     ```bash
-    git clone git@github.com:imran1509/DevSecOps-Project-Netflix-Deployment.git
+    git clone https://github.com/popeye605/straming-website.git
     ```
     
 
@@ -147,7 +147,7 @@ pipeline {
         }
         stage('Code Fetch Stage') {
             steps {
-                git branch: 'main', url: 'https://github.com/imran1509/DevSecOps-Project-Netflix-Deployment.git'
+                git branch: 'main', url: 'https://github.com/popeye605/straming-website.git'
             }
         }
         stage('Install Dependencies') {
@@ -621,7 +621,7 @@ That's it! You've successfully installed and set up Grafana to work with Prometh
 4. **Access your Application**
    - To Access the app make sure port 30007 is open in your security group and then open a new tab paste your NodeIP:30007, your app should be running.
   
-  ![](https://github.com/imran1509/DevSecOps-Project-Netflix-Deployment/blob/main/public/assets/home_page.png)
+  ![](https://github.com/popeye605/straming-website/blob/main/public/assets/home_page.png)
 
 <div align="center">
   <p align="center">Home Page</p>
