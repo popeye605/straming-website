@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_IMAGE = "popeye605/straming-website" // Changed to match your repo name/username style
+        DOCKER_IMAGE = "ansaarnaqvi12/straming-website" // Matches your successful login account
         DOCKER_HUB_CREDS = 'docker'
         KUBECONFIG_CREDS = 'k8s-creds'
         TMDB_API_KEY = credentials('TMDB_API_KEY') // Add this to Jenkins Credentials as Secret Text
